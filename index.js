@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const User = require("./database");
 const path = require("path");
-const { escape } = require("querystring");
 const bodyParser = require("body-parser");
 // const methodOverride = require('method-override');
 
@@ -13,14 +12,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set 'views' directory for any views
-app.set("views", path.join(__dirname, "view"));
-app.set("view engine", "ejs");
+// app.set("views", path.join(__dirname, "view"));
+// app.set("view engine", "ejs");
 
-app.get("/", async(req, res) => {
+app.get("/", async (req, res) => {
   const users = await Users.find({});
-  res.render("index",{
-    users:users
-  })
+  res.render("index", {
+    users: users,
+  });
 });
 
 app.post("/register", async (req, res) => {
@@ -38,18 +37,35 @@ app.post("/register", async (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("register");
+  res.send("register");
 });
 
-app.get("/edit/:id",async(req,res)=>{
-    const {id} = req.params;
-    const user = await User.findById({_id:id})
-    if(user==null){
-        res.redirect("/")
-    }else{
-        res.status(200).send("/edit")
-    }
-})
+app.get("/show/:id", async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById({ _id: id });
+  if (user == null) {
+    return res.status(404).send("sorry user do not exist");
+  } else {
+    res.status(200).send(user);
+  }
+});
+
+app.post("/update/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, email, password } = req.body;
+  const updateuser = await User.findByIdAndUpdate(
+    { _id: id },
+    { name, email, password },
+    { new: true }
+  );
+  res.send("user updated");
+});
+
+app.get("/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  const deleteuser = await User.findByIdAndDelete({ _id: id });
+  res.status(200).send("user deleted");
+});
 
 app.listen(4500, () => {
   console.log("Server is running at port 4500");
