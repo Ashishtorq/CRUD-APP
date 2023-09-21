@@ -8,10 +8,10 @@ mongoose.connect('mongodb://127.0.0.1:27017/usercrudapp')
     console.log(e);
 })
 
-const schema = new mongoose.Schema({
-    name:string,
-    email:string,
-    password:string
+const Schema = new mongoose.Schema({
+    name:String,
+    email:String,
+    password:String
 })
 
 const Usermodel = mongoose.model("User",Schema);
