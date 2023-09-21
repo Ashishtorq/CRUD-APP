@@ -3,35 +3,54 @@ const app = express();
 const User = require("./database");
 const path = require("path");
 const { escape } = require("querystring");
+const bodyParser = require("body-parser");
+// const methodOverride = require('method-override');
 
 //// app.set("view engine", "ejs");
 ////app.use(express.static(path.join(__dirname, "public")));
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set 'views' directory for any views
 app.set("views", path.join(__dirname, "view"));
 app.set("view engine", "ejs");
 
-
-app.get("/", (req, res) => {
-  res.render("index", {
-    title: "This is index page",
-    text: "This is homepage",
-  });
+app.get("/", async(req, res) => {
+  const users = await Users.find({});
+  res.render("index",{
+    users:users
+  })
 });
 
-app.post("/register", async(res,req)=>{
-    const {name,email,password}=req.body;
-    const newuser = new User({name,email,password});
-    const usersave = await newuser.save();
-    res.redirect("/");
-})
+app.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+  console.log(name, email, password);
 
-app.get("/register",(req,res)=>{
-    res.render("register")
+  if (!name || !email || !password)
+    return res.status(404).send("wrong data bhai");
 
+  const newuser = new User({ name, email, password });
+  const usersave = await newuser.save();
+
+  res.status(200).send("succesfully register");
+  ////res.redirect("/");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.get("/edit/:id",async(req,res)=>{
+    const {id} = req.params;
+    const user = await User.findById({_id:id})
+    if(user==null){
+        res.redirect("/")
+    }else{
+        res.status(200).send("/edit")
+    }
 })
 
 app.listen(4500, () => {
-    console.log("Server is running at port 4500");
+  console.log("Server is running at port 4500");
 });

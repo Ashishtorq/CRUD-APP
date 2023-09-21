@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
-mongoose
-  .connect("mongodb://127.0.0.1:27017/usercrudapp")
+mongoose.connect('mongodb://127.0.0.1:27017/usercrudapp')
   .then(() => {
     console.log("Connection Successfull");
   })
