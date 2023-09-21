@@ -22,6 +22,7 @@ app.get("/", async (req, res) => {
   });
 });
 
+// Create Operation
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   console.log(name, email, password);
@@ -39,7 +40,7 @@ app.post("/register", async (req, res) => {
 app.get("/register", (req, res) => {
   res.send("register");
 });
-
+// Read Operation
 app.get("/show/:id", async (req, res) => {
   const { id } = req.params;
   const user = await User.findById({ _id: id });
@@ -49,7 +50,7 @@ app.get("/show/:id", async (req, res) => {
     res.status(200).send(user);
   }
 });
-
+//update operation
 app.post("/update/:id", async (req, res) => {
   const { id } = req.params;
   const { name, email, password } = req.body;
@@ -60,7 +61,7 @@ app.post("/update/:id", async (req, res) => {
   );
   res.send("user updated");
 });
-
+// delete operation
 app.get("/delete/:id", async (req, res) => {
   const { id } = req.params;
   const deleteuser = await User.findByIdAndDelete({ _id: id });
