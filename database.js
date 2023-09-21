@@ -1,20 +1,20 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-mongoose.connect('mongodb://127.0.0.1:27017/usercrudapp')
-.then(()=>{
-    console.log("Connection Successfull")
-})
-.catch((e)=>{
+mongoose
+  .connect("mongodb://127.0.0.1:27017/usercrudapp")
+  .then(() => {
+    console.log("Connection Successfull");
+  })
+  .catch((e) => {
     console.log(e);
-})
+  });
 
 const Schema = new mongoose.Schema({
-    name:String,
-    email:String,
-    password:String
-})
+  name: String,
+  email: String,
+  password: String,
+});
 
-const Usermodel = mongoose.model("User",Schema);
-
+const Usermodel = mongoose.model("User", Schema);
 
 module.exports = Usermodel;
