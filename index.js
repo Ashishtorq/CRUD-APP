@@ -29,7 +29,7 @@ app.post("/register", async (req, res) => {
 
   if (!name || !email || !password)
     return res.status(404).send("wrong data bhai");
-
+  
   const newuser = new User({ name, email, password });
   const usersave = await newuser.save();
 
